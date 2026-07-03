@@ -1,18 +1,50 @@
 services:
-  openWebUI:
-    image: ghcr.io/open-webui/open-webui:main
+  openwebui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    pull_policy: build
     restart: unless-stopped
     ports:
       - "3000:8080"
     environment:
+      BYPASS_MODEL_ACCESS_CONTROL: true 
       OLLAMA_BASE_URL: http://host.docker.internal:11434
+      WEBUI_SECRET_KEY: d99f52ca67e93fe9fbbd76e4880a2467e61fdc057b70c9e055b38f0a54aa4e64
+      ENABLE_RAG: true
+      ENABLE_FILE_UPLOAD: true
+      FILE_UPLOAD_ENABLED: true
+      MAX_FILE_SIZE: 250MB
+      CHROMA_PERSIST_DIRECTORY: /app/backend/data/vector_db
+      ALLOWED_FILE_TYPES: "pdf,txt,doc,docx,md,mp3,wav,m4a,ogg"
+      PDF_EXTRACT_IMAGES: true
+      RAG_FILE_MAX_AGE: 2592000
+      CLEANUP_INTERVAL: 86400
+      CHUNK_SIZE: 1000
+      CHUNK_OVERLAP: 100
+      ENABLE_WHISPER_LOCAL: True
+      WHISPER_MODEL: medium
+      ENABLE_STT: true
+      STT_ENGINE: whisper_local
+      WHISPER_MODEL_DIR: /app/backend/data/cache/whisper
+      WHISPER_COMPUTE_TYPE: float16
+      NVIDIA_VISIBLE_DEVICES: all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+              driver: nvidia
+              count: all
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./backend/data:/app/backend/data
+    depends_on:
+      - ollama
 
   ollama:
-    image: ollama/ollama:latest    
+    image: ollama/ollama:latest
     environment:
       NVIDIA_VISIBLE_DEVICES: all
     deploy:
@@ -21,7 +53,7 @@ services:
           devices:
             - capabilities: ["gpu"]
               driver: nvidia
-              count: all    
+              count: all
     restart: unless-stopped
     ports:
       - "11434:11434"
