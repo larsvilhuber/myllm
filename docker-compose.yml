@@ -10,7 +10,7 @@ services:
     environment:
       BYPASS_MODEL_ACCESS_CONTROL: true 
       OLLAMA_BASE_URL: http://host.docker.internal:11434
-      WEBUI_SECRET_KEY: d99f52ca67e93fe9fbbd76e4880a2467e61fdc057b70c9e055b38f0a54aa4e64
+      WEBUI_SECRET_KEY: ${SECRET_KEY}
       ENABLE_RAG: true
       ENABLE_FILE_UPLOAD: true
       FILE_UPLOAD_ENABLED: true
@@ -59,3 +59,22 @@ services:
       - "11434:11434"
     volumes:
       - ./ollama:/root/.ollama
+
+  gpu-monitor:
+    image: ubuntu:22.04
+    restart: unless-stopped
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: utility
+      REFRESH_SECONDS: "30"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+              driver: nvidia
+              count: all
+    volumes:
+      - /home/www/system:/output
+      - ./gpu-monitor.sh:/gpu-monitor.sh:ro
+    command: ["/bin/bash", "/gpu-monitor.sh"]
