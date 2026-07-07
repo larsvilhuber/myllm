@@ -24,8 +24,15 @@ RUN pip install --no-cache-dir \
     python-magic==0.4.27 \
     pymupdf==1.23.8 \
     pdf2image==1.16.3 \
+    rapidocr \
     # Ensure Whisper and its dependencies are present
     openai-whisper faster-whisper
+
+# unstructured[pdf]==0.11.6 pulls in unstructured-inference, which pins
+# onnxruntime<1.16. That old onnxruntime can't load rapidocr's PP-OCRv6
+# models (ONNX IR version 10, requires onnxruntime>=1.18). Force the
+# upgrade as a separate step so pip doesn't try to reconcile the two.
+RUN pip install --no-cache-dir --upgrade "onnxruntime==1.19.2"
 
 # Switch back to non-root user
 USER 1000
