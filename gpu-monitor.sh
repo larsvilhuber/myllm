@@ -52,9 +52,14 @@ while true; do
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>System Status</title>
   <style>
-    body { font-family: 'Courier New', monospace; background: #1a1a2e; color: #e0e0e0; padding: 2em; margin: 0 auto; }
+    body { font-family: 'Courier New', monospace; background: #1a1a2e; color: #e0e0e0; padding: 2em; margin: 0 auto; font-size: 1.1em; }
+    @media (max-width: 600px) {
+      body { padding: 1em; }
+      .cores { grid-template-columns: 1fr; }
+    }
     h2 { color: #7fdbff; margin-bottom: 0.8em; }
     h3 { color: #7fdbff; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.08em; margin: 1.6em 0 0.5em; }
     .hw { border-collapse: collapse; margin-bottom: 0.5em; }
