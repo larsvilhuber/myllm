@@ -68,9 +68,12 @@ while true; do
     .core-pct { font-size: 0.85em; width: 3em; }
     pre { white-space: pre; margin-top: 0; }
     .ts { color: #555; font-size: 0.85em; margin-top: 1.5em; }
+    .back { color: #7fdbff; text-decoration: none; font-size: 0.85em; }
+    .back:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
+  <p><a class="back" href="/">&larr; Back to main site</a></p>
   <h2>System Status</h2>
 HTMLHEAD
 
