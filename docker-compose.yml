@@ -59,6 +59,14 @@ services:
       - "11434:11434"
     volumes:
       - ./ollama:/root/.ollama
+    labels:
+      - "autoheal=true"
+    healthcheck:
+      test: ["CMD", "nvidia-smi"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+      start_period: 15s
 
   gpu-monitor:
     image: ubuntu:22.04
@@ -79,3 +87,21 @@ services:
       - /home/www/system:/output
       - ./gpu-monitor.sh:/gpu-monitor.sh:ro
     command: ["/bin/bash", "/gpu-monitor.sh"]
+    labels:
+      - "autoheal=true"
+    healthcheck:
+      test: ["CMD", "nvidia-smi"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+      start_period: 15s
+
+  autoheal:
+    image: willfarrell/autoheal:latest
+    restart: unless-stopped
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal
+      AUTOHEAL_INTERVAL: 30
+      AUTOHEAL_START_PERIOD: 60
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

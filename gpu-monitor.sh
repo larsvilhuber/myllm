@@ -47,12 +47,13 @@ while true; do
     SMI_OUTPUT=$(nvidia-smi 2>&1)
 
     {
-        cat <<'HTMLHEAD'
+        cat <<HTMLHEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="$REFRESH">
   <title>System Status</title>
   <style>
     body { font-family: 'Courier New', monospace; background: #1a1a2e; color: #e0e0e0; padding: 2em; margin: 0 auto; font-size: 1.1em; }
