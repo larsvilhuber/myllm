@@ -188,7 +188,7 @@ HTMLHEAD
     .gauge::after { content: ""; position: absolute; inset: 0;
       background: repeating-linear-gradient(90deg, transparent 0 4px, var(--pane) 4px 6px); }
 
-    .cgrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0 1.2em; margin-top: 0.6em; }
+    .cgrid { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-flow: column; gap: 0 1.2em; margin-top: 0.6em; }
     .cgrid .grow { grid-template-columns: 1.8em 1fr 3em; margin: 0.1em 0; }
     .cgrid .gauge { height: 10px; }
     .gpane { display: grid; grid-template-columns: 3fr 2fr; gap: 1em 1.5em; align-items: start; }
@@ -208,7 +208,7 @@ HTMLHEAD
     @media (max-width: 600px) {
       body { padding: 0.8em; }
       .grow { grid-template-columns: 4em 1fr 7em; }
-      .cgrid { grid-template-columns: repeat(2, 1fr); }
+      .cgrid { grid-template-columns: repeat(2, 1fr); grid-auto-flow: row; grid-template-rows: none !important; }
       .gpane { grid-template-columns: 1fr; }
       .gcharts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .prow { grid-template-columns: 1fr 4em 6em; }
@@ -254,7 +254,7 @@ HTMLHEAD
         gauge "Load 15m" "$LOAD15" "$(pct "$LOAD15" "$CPU_THREADS")"
         gauge "RAM" "${MEM_USED_GiB} / ${MEM_TOTAL_GiB} GiB" "$MEM_PCT"
         echo '  </div></div>'
-        echo '  <div class="cgrid">'
+        printf '  <div class="cgrid" style="grid-template-rows:repeat(%d,auto)">\n' "$(( (${#CPU_UTILS[@]} - 1 + 5) / 6 ))"
         for ((i=1; i<${#CPU_UTILS[@]}; i++)); do
             gauge "$((i-1))" "${CPU_UTILS[$i]}%" "${CPU_UTILS[$i]}"
         done
