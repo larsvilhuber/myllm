@@ -75,7 +75,7 @@ services:
     environment:
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: utility
-      REFRESH_SECONDS: "30"
+      REFRESH_SECONDS: "5"
     deploy:
       resources:
         reservations:
